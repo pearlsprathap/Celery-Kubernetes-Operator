@@ -13,7 +13,7 @@ To overcome one such bottleneck in Celery worker process, this operator will hel
 
 This operator was deployed and tested with minikube V1.22, Ubuntu linux 5.8, though technically this could work on other platforms after testing.
 
-# Test case
+# Deployment and autoscale
 
 For simplicty, the deployments were made in default namespace, but can be customized by modifying the values.  
 
