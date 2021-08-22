@@ -35,7 +35,7 @@ Download the code to your machine where you are performing the deployment.
 
              kubectl apply -f templates/static/redis-master.yaml
 
- !(img/redis_deployment.PNG)
+ ![Screenshot](img/redis_deployment.PNG)
 
 - Deploy for operator 
 
@@ -45,13 +45,13 @@ Note: In our testcase, we are using the repository images from github.com/pearls
 
 At this moment, we can see the another pod getting created for operator. Also once the operator is created, it will further start creating other pods. One for flower and two for celery workers. This creates two celery workers initially since we have set minReplicas as 2 in cr.yaml
 
-!(img/Operator_deployment.PNG)
+![Screenshot](img/Operator_deployment.PNG)
 
 - As we can see now the flower deployment is completed and we can access the UI by finding the URL. 
 
              minikube service celery-crd-example-flower --url
 
-!(img/flower_url.PNG)
+![Screenshot](img/flower_url.PNG)
 
 Note: If we are performing this deployment in Azure or any public cloud, we can use ssh tunnel to access the flower UI. SSH tunnel can be done by creating SSH connection from a new window using -L option.
 
@@ -59,7 +59,7 @@ Note: If we are performing this deployment in Azure or any public cloud, we can 
              
 - After doing SSH tunnel, we can access flower UI from the localhost using the URL - http://localhost:30733
 
-!(img/Flower_UI.PNG)
+![Screenshot](img/Flower_UI.PNG)
 
 We can see the dashboard, which shows the celery worker in real time. In further tabs, we can see tasks/broker/monitor of the celery. 
 
@@ -71,22 +71,22 @@ Now let us deploy the simple application to flood messages to the queue so that 
 
 As we can see in the below screenshot, we could see the celery workers are scaled up to 4 after deployment of the application.
 
-!(img/flask_deployment.PNG)
+![Screenshot](img/flask_deployment.PNG)
 
 This can also be seen from Flower UI.
 
-!(img/Flower_UI_2.PNG)
-!(img/Flower_UI_3.PNG)
+![Screenshot](img/Flower_UI_2.PNG)
+![Screenshot](img/Flower_UI_3.PNG)
 
 Now let us delete the flask application to see if the celery workers get scaled down.
 
              kubectl delete -f templates/static/flask-example.yaml
              
-!(img/Flower_UI_4.PNG)
+![Screenshot](img/Flower_UI_4.PNG)
 
 This can also be seen from Flower UI.
 
-!(img/Flower_UI_5.PNG)
+![Screenshot](img/Flower_UI_5.PNG)
 
 As we have seen in the above test case, we were able to deploy, autoscale and scale down using this operator. 
 
