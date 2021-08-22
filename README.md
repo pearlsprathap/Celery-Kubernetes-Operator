@@ -2,12 +2,12 @@
 
 Due to unpredictable nature of some businesses, system's performance degrades when there is an unexpected load. In such cases, customers face inconvenience resulting in loss of reputation. Usually in such situations, components are scaled up either manually or by some process in automation. On the other hand, scaling down is a challenging operation to be done manually, else we will have idle systems and still being an expenditure to the organization. 
 
-To overcome one such bottleneck in Celery worker process, this operator will help to deploy, autoscale and deprovision when it is ran in Kubernetes. Primarily it deploys the required celery workers, a flower component to monitor them and a redis backend. When the system load increases, it scales up the number of celery worker pods until a maximum customizable units. Also once the load reduces, it will scaledown the pods to the minimum number, which can also be customized.
+To overcome one such bottleneck in Celery worker process, this operator will help to deploy, autoscale and deprovision when it is deployed in Kubernetes. Primarily it deploys the required celery workers, a flower component to monitor them and a redis backend. When the system load increases, it scales up the number of celery worker pods until a maximum customizable units. Also once the load reduces, it will scaledown the pods to the minimum number, which can also be customized.
 
 
 # Pre-requisites
 
-- Working kubernetes cluster 
+- Working Kubernetes cluster 
 - Account with cluster admin privileges
 - Access to internet
 
@@ -31,13 +31,13 @@ Download the code to your machine where you are performing the deployment.
 
              kubectl apply -f deploy/cr.yaml
 
-- Deploy redis, which this case is going to serve both as backend and broker. Post this step, we could see a pod created for redis.
+- Deploy redis, which in our  case is going to serve both as backend and broker. Post this step, we could see a pod created for redis.
 
              kubectl apply -f templates/static/redis-master.yaml
 
  ![Screenshot](img/redis_deployment.PNG)
 
-- Deploy for operator 
+- Deploy the operator 
 
              kubectl apply -f deploy/operator.yaml
 
@@ -61,11 +61,11 @@ Note: If we are performing this deployment in Azure or any public cloud, we can 
 
 ![Screenshot](img/Flower_UI.PNG)
 
-We can see the dashboard, which shows the celery worker in real time. In further tabs, we can see tasks/broker/monitor of the celery. 
+We can see the dashboard, which shows the celery worker status in real time. In further tabs, we can see tasks/broker/monitor of the celery workers. 
 
 Now that we have seen the deployment, we will test the autoscaling feature. For doing this, we are going deploy a sample application. This is a simple add operation which runs 10000 times in 3 batches. We have configured in CR if the message length is more than 100 it will autoscale and create a new pod. This number can be configured as needed. 
 
-Now let us deploy the simple application to flood messages to the queue so that we can see the celery gets autoscaled. We can see that from the initial pod of 2, it will autoscale to 4. This example application will also create a pod for itself.
+Now let us deploy the simple application to flood tasks to the queue so that we can see the celery gets autoscaled. We can see that from the initial pod of 2, it will autoscale to 4. This example application will also create a pod for itself.
 
              kubectl apply -f templates/static/flask-example.yaml
 
@@ -92,14 +92,15 @@ As we have seen in the above test case, we were able to deploy, autoscale and sc
 
  # Further scope of this project
  
-- We can replace RabbitMQ in place of Redis as the broker.
+- We can replace RabbitMQ in place of Redis for broker and PostgreSQL as backend.
 - Upgrade to code to use docker-compose to simplify deployments.
 
  # Reference and bibliography
  
- This project was influenced by the below references.
+ This project was inspired by the below references.
  
  - https://github.com/jmdacruz/celery-k8s-operator/tree/master/deploy
  - https://www.canva.com/design/DAD37xRhCDE/ZUdsvdIEcj9FXKdwDxOtyg/view?utm_content=DAD37xRhCDE&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton#1
  - https://github.com/celery/Celery-Kubernetes-Operator
  - Europython 2020 presentations
+ - https://github.com/celery/ceps/issues/24
