@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {app_name}-flower
+  name: {app_name}-flower
+  namespace: {namespace}
+spec:
+  minReadySeconds: 10
+  replicas: {replicas}
+  selector:
+    matchLabels:
+      run: {app_name}-flower
+  strategy:
+    rollingUpdate:
+      maxSurge: 20%
+      maxUnavailable: 0%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: {app_name}-flower
+    spec:
+      containers:
+      - name: {app_name}-flower
+        image: {image}
+        ports:
+          - containerPort: 5555
+        args:
+        - --app={celery_app}
+        command:
+        - flower
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: {lim_cpu}
+            memory: {lim_mem}
+          requests:
+            cpu: {req_cpu}
+            memory: {req_mem}
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

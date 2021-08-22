@@ -1,0 +1,39 @@
+apiVersion: celeryproject.org/v1alpha1
+kind: Celery
+metadata:
+  name: example-celery-obj
+spec:
+  common:
+    appName: celery-crd-example
+    celeryApp: 'app:celery_app'
+    image: pearlsprathap/example-image:latest
+  workerSpec:
+    numOfWorkers: 2
+    queues: celery # default queue name
+    logLevel: debug
+    concurrency: 2
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "64Mi"
+      limits:
+        cpu: "200m"
+        memory: "128Mi"
+  flowerSpec:
+    replicas: 1
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "64Mi"
+      limits:
+        cpu: "200m"
+        memory: "128Mi"
+  scaleTargetRef:
+  - kind: worker
+    minReplicas: 2
+    maxReplicas: 4 
+    metrics:
+    - name: message_queue
+      target:
+        type: length
+        averageValue: 100

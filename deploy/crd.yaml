@@ -1,0 +1,150 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: celery.celeryproject.org
+spec:
+  scope: Namespaced
+  group: celeryproject.org
+  names:
+    kind: Celery
+    listKind: CeleryList
+    plural: celery
+    singular: celery
+    shortNames:
+      - cel
+      - capp
+  versions: 
+    - name: v1alpha1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          required: ["spec"]
+          properties:
+            spec:
+              description: "spec defines the desired state and params for celery cluster"
+              type: object
+              properties:
+                common:
+                  description: "common configuration parameters for all worker and flower deployments"
+                  required: ["appName", "celeryApp", "image"]
+                  type: object
+                  properties:
+                    image:
+                      description: "container image name to run in the worker and flower deployments"
+                      type: string
+                    appName:
+                      description: "app name for worker and flower deployments, will be suffixed accordingly"
+                      type: string
+                    celeryApp:
+                      description: "celery app instance to use (e.g. module.celery_app_attr_name)"
+                      type: string
+                workerSpec:
+                  description: "worker deployment specific parameters"
+                  type: object
+                  properties:
+                    numOfWorkers:
+                      type: integer
+                    queues:
+                      type: string
+                    logLevel:
+                      type: string
+                    concurrency:
+                      type: integer
+                    maxTasksPerChild:
+                      type: integer
+                    resources:
+                      type: object
+                      properties:
+                        limits:
+                          type: object
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                        requests:
+                          type: object
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                  x-kubernetes-preserve-unknown-fields: true
+                flowerSpec:
+                  description: "flower deployment specific parameters"
+                  type: object
+                  properties:
+                    replicas:
+                      type: integer
+                    resources:
+                      type: object
+                      properties:
+                        limits:
+                          type: object
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                        requests:
+                          type: object
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                  x-kubernetes-preserve-unknown-fields: true
+                scaleTargetRef:
+                  description: "auto scaling targets"
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      kind:
+                        description: "target of which kind (e.g worker, flower)"
+                        type: string
+                      minReplicas:
+                        description: "minimum number of replicas to keep"
+                        type: integer
+                      maxReplicas:
+                        description: "maximum number of replicas to keep"
+                        type: integer
+                      metrics:
+                        description: "specify metrics to scale/downscale the number of workers"
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              description: "name of metric. (e.g. message_queue)"
+                              type: string
+                            target:
+                              type: object
+                              properties:
+                                type:
+                                  description: "target metric type. (e.g. length)"
+                                  type: string
+                                averageValue:
+                                  description: "average metric value to maintain"
+                                  type: integer
+            status:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true    
+      additionalPrinterColumns:
+        - name: Children
+          type: string
+          priority: 0
+          jsonPath: .status.create_fn.children_count
+          description: Number of children successfully created by handler
+        - name: Status
+          type: string
+          priority: 0
+          jsonPath: .status.create_fn.status
+          description: Status as returned from the handler
+        - name: Age
+          type: date
+          priority: 0
+          jsonPath: .metadata.creationTimestamp
+          description: Age of custom object

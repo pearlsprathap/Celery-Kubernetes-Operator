@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {app_name}
+    celery: "true"
+  name: {app_name}-celery-worker
+  namespace: {namespace}
+spec:
+  minReadySeconds: 10
+  replicas: {num_of_workers}
+  selector:
+    matchLabels:
+      app: {app_name}
+  strategy:
+    rollingUpdate:
+      maxSurge: 20%
+      maxUnavailable: 0%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {app_name}
+    spec:
+      containers:
+      - name: {app_name}-celery-worker
+        image: {image}
+        imagePullPolicy: Always
+        command: ["celery"]
+        args:
+        - "--app={celery_app}"
+        - "worker"
+        - "--queues={queues}"
+        - "--loglevel={loglevel}"
+        - "--concurrency={concurrency}"
+        resources:
+          limits:
+            cpu: "{lim_cpu}"
+            memory: "{lim_mem}"
+          requests:
+            cpu: "{req_cpu}"
+            memory: "{req_mem}"
