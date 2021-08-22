@@ -1,8 +1,8 @@
 # Kubernetes operator for Celery
 
-Due to unpredictable nature of some business, system's performance degrades when there is an unexpected load. In such cases, customers face inconvenience resulting in loss of reputation. Usually in such situations, components are scaled up either manually or by some process in automation. On the other hand, scaling down is a challenging process to be done manually for the same reason, else we will have idle systems and still being an expenditure to the organization. 
+Due to unpredictable nature of some businesses, system's performance degrades when there is an unexpected load. In such cases, customers face inconvenience resulting in loss of reputation. Usually in such situations, components are scaled up either manually or by some process in automation. On the other hand, scaling down is a challenging operation to be done manually, else we will have idle systems and still being an expenditure to the organization. 
 
-To overcome one such bottleneck in Celery worker process, this operator will help to deploy, autoscale and deprovision when it is ran in Kubernetes. Primarily it deploys the required celery workers, a flower component to monitor them,a redis backend. When the system load increases it scales up the number of pods until a maximum customizable units. Also once the load reduces, it will scaledown the pods to minimum number which can also be customized.
+To overcome one such bottleneck in Celery worker process, this operator will help to deploy, autoscale and deprovision when it is ran in Kubernetes. Primarily it deploys the required celery workers, a flower component to monitor them and a redis backend. When the system load increases, it scales up the number of celery worker pods until a maximum customizable units. Also once the load reduces, it will scaledown the pods to the minimum number, which can also be customized.
 
 
 # Pre-requisites
