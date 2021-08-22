@@ -65,7 +65,7 @@ We can see the dashboard, which shows the celery worker status in real time. In 
 
 Now that we have seen the deployment, we will test the autoscaling feature. For doing this, we are going deploy a sample application. This is a simple add operation which runs 10000 times in 3 batches. We have configured in CR if the message length is more than 100 it will autoscale and create a new pod. This number can be configured as needed. 
 
-Now let us deploy the simple application to flood tasks to the queue so that we can see the celery gets autoscaled. We can see that from the initial pod of 2, it will autoscale to 4. This example application will also create a pod for itself.
+- Now let us deploy the simple application to flood tasks to the queue so that we can see the celery gets autoscaled. We can see that from the initial pod of 2, it will autoscale to 4. This example application will also create a pod for itself.
 
              kubectl apply -f templates/static/flask-example.yaml
 
@@ -78,7 +78,7 @@ This can also be seen from Flower UI.
 ![Screenshot](img/Flower_UI_2.PNG)
 ![Screenshot](img/Flower_UI_3.PNG)
 
-Now let us delete the flask application to see if the celery workers get scaled down.
+- Now let us delete the flask application to see if the celery workers get scaled down.
 
              kubectl delete -f templates/static/flask-example.yaml
              
