@@ -94,6 +94,7 @@ As we have seen in the above test case, we were able to deploy, autoscale and sc
  
 - We can replace RabbitMQ in place of Redis for broker and PostgreSQL as backend.
 - Upgrade to code to use docker-compose to simplify deployments.
+- Currently this monitor only one message queue which can be increased if needed.
 
  # Reference and bibliography
  
