@@ -108,3 +108,10 @@ def worker_spec_from_dict(s: Any) -> WorkerSpec:
 def worker_spec_to_dict(x: WorkerSpec) -> Any:
     return to_class(WorkerSpec, x)
 
+# To use this code, make sure you
+#
+#     import json
+#
+# and then, to convert JSON from a string, do
+#
+#     result = worker_spec_from_dict(json.loads(json_string))
