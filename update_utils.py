@@ -46,12 +46,25 @@ def update_all_deployments(api, apps_api_instance, spec, status, namespace):
 
 
 def get_curr_deployment_from_handler_status(handler_name, status, child_type):
+    """
+        Get current deployment name from handler's status
+        @param: handler_name - which handler to get from
+        @param: child_type - worker or flower
+        @returns: current deployment name
+    """
+    for child in status.get(handler_name).get('children'):
+        if child.get('type') == child_type and child.get('kind') == constants.DEPLOYMENT_KIND:  # NOQA
             return child.get('name')
 
     return None
 
 
 def get_curr_deployment_name(status, child_type):
+    """
+        Get current deployment name from parent's status
+        @param: child_type - worker or flower
+        @returns: current deployment name
+    """
     if status.get('update_fn'):
         return get_curr_deployment_from_handler_status('update_fn', status, child_type)
 
@@ -73,6 +86,7 @@ def update_worker_deployment(apps_api_instance, spec, status, namespace):
         'resources': worker_spec['resources']
     }
 
+    # JSON way of submitting spec to deploy/patch
     patch_body = {
         "spec": {
             "replicas": worker_spec['numOfWorkers'],
@@ -109,6 +123,7 @@ def update_flower_deployment(apps_api_instance, spec, status, namespace):
         'resources': flower_spec['resources']
     }
 
+    # JSON way of submitting spec to deploy/patch
     patch_body = {
         "spec": {
             "replicas": flower_spec['replicas'],
@@ -132,6 +147,7 @@ def update_flower_deployment(apps_api_instance, spec, status, namespace):
 
 
 def update_flower_service(api, spec, status, namespace):
+    # Only app_name change will affect flower service
     patch_body = {
         "spec": {
             "selector": {
@@ -142,7 +158,7 @@ def update_flower_service(api, spec, status, namespace):
 
     flower_svc_name = get_curr_deployment_name(
         status, constants.FLOWER_TYPE
-    )
+    )  # flower svc is named same as flower deployment
     return api.patch_namespaced_service(
         flower_svc_name, namespace, patch_body
     )

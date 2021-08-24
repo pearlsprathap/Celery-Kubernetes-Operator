@@ -119,6 +119,11 @@ def update_fn(spec, status, namespace, logger, **kwargs):
 
 
 def get_modified_spec_object(diff):
+    """
+        @param: diff - arg provided by kopf when an object is updated
+        diff format - Tuple of (op, (fields tuple), old, new)
+        @returns ModifiedSpec namedtuple signifying which spec was updated
+    """
     common_spec_checklist = ['appName', 'celeryApp', 'image']
     celery_config_checklist = ['workerSpec']
     flower_config_checklist = ['flowerSpec']
@@ -147,10 +152,17 @@ def get_modified_spec_object(diff):
 
 
 def check_flower_label(value, spec, **_):
+    """
+        Checks if incoming label value is the one assigned to
+        flower service and deployment
+    """
     return value == f"{spec['common']['appName']}-flower"
 
 
 def get_flower_svc_host(status):
+    """
+        Get latest flower SVC host from parent's status
+    """
     handler = status.get('update_fn') or status.get('create_fn')
 
     for child in handler.get('children'):
@@ -235,8 +247,19 @@ def horizontal_autoscale(spec, status, namespace, **kwargs):
 
 
 def validate_stuff(spec):
+    """
+        1. If the deployment/svc already exists, k8s throws error
+        2. Response and spec classes and enums
+    """
     pass
 
 
 def validate_spec(spec):
+    """
+        Validates the incoming spec
+        @returns - True/False, Error Message
+    """
+    # size = spec.get('size')
+    # if not size:
+    #     return size, "Size must be set"
     return None, None

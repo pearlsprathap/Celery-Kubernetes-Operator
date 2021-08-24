@@ -105,4 +105,7 @@ def expose_flower_service(api, namespace, spec, logger):
 
 
 def mark_as_child(data):
+    """
+        Marks the incoming data as child of celeryapplications
+    """
     kopf.adopt(data)
