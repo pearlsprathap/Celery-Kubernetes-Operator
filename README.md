@@ -41,7 +41,7 @@ Download the code to your machine where you are performing the deployment.
 
              kubectl apply -f deploy/operator.yaml
 
-Note: In our testcase, we are using the repository images from github.com/pearlsprathap. If needed the images can be created using the dockerfile available in this repo.
+Note: In our testcase, we are using the repository images from customer dockerhub [link](https://hub.docker.com/repository/docker/pearlsprathap/celery-operator. If needed the images can be created using the dockerfile available in this repo.
 
 At this moment, we can see the another pod getting created for operator. Also once the operator is created, it will further start creating other pods. One for flower and two for celery workers. This creates two celery workers initially since we have set minReplicas as 2 in cr.yaml
 
